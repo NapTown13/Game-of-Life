@@ -30,7 +30,7 @@ function setup() {
     rows = height / resolution;
 
     bornColor = color(0, 255, 0);
-    diedColor = color(255, 0, 0);
+    diedColor = color(0, 0, 0);
     deadColor = color(0, 0, 0);
     aliveColor = color(0, 0, 255);
 
