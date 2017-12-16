@@ -19,31 +19,41 @@ let bornColor;
 let diedColor;
 let aliveColor;
 let deadColor;
+let deadColor1;
+let deadColor2;
 let timerReset = fr;
 let timer = timerReset;
 
 function setup() {
-    createCanvas(600, 400);
+    createCanvas(800, 400);
     frameRate(fr);
 
     cols = width / resolution;
     rows = height / resolution;
 
-    bornColor = color(0, 255, 0);
-    diedColor = color(0, 0, 0);
-    deadColor = color(0, 0, 0);
-    aliveColor = color(0, 0, 255);
+    bornColor = color(255);
+    deadColor = color(0);
+    aliveColor = color(255);
+    diedColor = deadColor;
 
     grid = make2DArray(cols, rows);
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
-            grid[i][j] = random(10) < 1;
+            grid[i][j] = random(12) < 1;           
         }
     }
 }
 
+function mousePressed() {
+
+    deadColor = color(random(255), random(255), random(255));
+    bornColor = color(random(255), random(255), random(255));
+    aliveColor = color(random(255), random(255), random(255));
+    diedColor = deadColor;
+}
+
 function draw() {
-    background(0);
+   // background(255,0,0);
     let newGrid = make2DArray(cols, rows);
     let colors = make2DArray(cols, rows);
 
@@ -81,19 +91,39 @@ function draw() {
             let x = i * resolution;
             let y = j * resolution;
             fill(colors[i][j]);
-            stroke(0);
+            stroke(deadColor);
             rect(x, y, resolution - 1, resolution - 1);
         }
     }
+
     grid = newGrid;
     timer--;
     if (timer == 0) {
-        // lazarus one cell
-        grid[floor(random(cols))][floor(random(rows))] = 1;
+        let i = floor(random(cols - 5));
+        let j = floor(random(rows - 5));
+        live(i, j);
         timer = timerReset;
     }
 }
 
+function makeBlock(i, j) {
+    live(i, j);
+    live(i + 1, j);
+    live(i, j - 1);
+    live(i + 1, j - 1);
+}
+
+function makeGlider(i, j) {
+    grid[i][j] = 1;
+    grid[i + 1][j] = 1;
+    grid[i + 2][j] = 1;
+    grid[i + 2][j - 1] = 1;
+    grid[i + 1][j - 2] = 1;
+}
+
+function live(i, j) {
+    grid[i][j] = 1;
+}
 
 function countNeighbors(grid, x, y) {
     let sum = 0;
